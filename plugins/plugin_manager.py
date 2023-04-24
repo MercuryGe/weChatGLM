@@ -66,12 +66,12 @@ class PluginManager:
                     lambda k, v: v["priority"], pconf["plugins"], reverse=True
                 )
         else:
-            modified = True
+            modified = True  # 如果plugins.json文件不存在，则创建一个空的字典对象，并设置reverse为True
             pconf = {"plugins": SortedDict(lambda k, v: v["priority"], reverse=True)}
-        self.pconf = pconf
-        if modified:
-            self.save_config()
-        return pconf
+        self.pconf = pconf # 将pconf字典对象赋值给实例变量self.pconf
+        if modified:         
+            self.save_config() # 如果plugins.json文件不存在，则创建一个空的字典对象并保存到plugins.json文件中
+        return pconf  # 返回pconf字典对象
 
     def scan_plugins(self):
         logger.info("Scaning plugins ...")
@@ -172,14 +172,14 @@ class PluginManager:
         return False
 
     def load_plugins(self):
-        self.load_config()
-        self.scan_plugins()
-        pconf = self.pconf
+        self.load_config() # 载入插件配置信息
+        self.scan_plugins() # 扫描插件目录下的所有插件，将可用的插件加入插件列表
+        pconf = self.pconf # 获取插件配置信息，并打印到调试日志中
         logger.debug("plugins.json config={}".format(pconf))
-        for name, plugin in pconf["plugins"].items():
+        for name, plugin in pconf["plugins"].items(): # 遍历所有的插件，检查插件是否在插件列表中
             if name.upper() not in self.plugins:
                 logger.error("Plugin %s not found, but found in plugins.json" % name)
-        self.activate_plugins()
+        self.activate_plugins()  # 激活所有的插件
 
     def emit_event(self, e_context: EventContext, *args, **kwargs):
         if e_context.event in self.listening_plugins:
