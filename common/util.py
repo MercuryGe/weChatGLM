@@ -37,8 +37,15 @@ class Util():
         url = "http://127.0.0.1:7861"
         payload = {
             "prompt": Pprompt,
-            "steps": 5,
-            "negative_prompt": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry"
+            "steps": 20,
+            "negative_prompt": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
+            "sampler_index": "DPM++ 2M Karras", #采样方法选择
+            "restore_faces": True, # 是否开启面部重绘
+            "enable_hr": True, # 是否开启高清修复
+            "denoising_strength": 0.7, #重绘幅度
+            "hr_scale": 2, #放大倍率
+            "hr_upscaler": "Latent", # 放大算法
+            "hr_second_pass_steps": 0, # 高清修复采样次数
         }
         response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
         r = response.json()
@@ -51,3 +58,10 @@ class Util():
             pnginfo = PngImagePlugin.PngInfo()
             pnginfo.add_text("parameters", response2.json().get("info"))
             image.save('stable_diffusion.png', pnginfo=pnginfo)
+
+    def reloadCheckpoint():
+        url = "http://127.0.0.1:7861"
+        payload = {
+            
+        }
+        response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
