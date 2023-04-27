@@ -59,9 +59,20 @@ class Util():
             pnginfo.add_text("parameters", response2.json().get("info"))
             image.save('stable_diffusion.png', pnginfo=pnginfo)
 
+    def stable_diffusion_get_sd_models():
+        url = "http://127.0.0.1:7861" 
+        response = requests.get(url=f'{url}/sdapi/v1/sd-models')
+        models = response.json()
+
+        for model in models:
+            model_name = model['model_name']
+            model_hash = model['hash']
+            print(f"Model name: {model_name}, Hash: {model_hash}")
+        return model_name, model_hash
+
     def reloadCheckpoint():
         url = "http://127.0.0.1:7861"
         payload = {
             
         }
-        response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
+        response = requests.post(url=f'{url}/sdapi/v1/reload-checkpoint', json=payload)

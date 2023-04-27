@@ -11,9 +11,16 @@ from common.util import Util
 from PIL import Image
 
 # 本地部署的chatGML模型（与app.py系统启动在同一个环境下）
-class ChatGML(Bot):
+#class ChatGML(Bot):
+class ChatGML():
     def __init__(self):
         if PAUSE == False:
+            print("初始化stable diffusion...")
+            print("读取sd模型...")
+            #model_name, model_hash = Util.stable_diffusion_get_sd_models()
+            print("读取")
+
+            print("初始化chatGML....")
             self.tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH,trust_remote_code=True)
             self.model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True)
             if GPU == False:
@@ -104,7 +111,8 @@ class ChatGML(Bot):
 
                 # 动漫
 
-                # 
+                # 线稿
+                Util.reloadCheckpoint()
                 prompt_history = [["我接下来会给你一些作画的指令，你只要回复出作画内容及对象，不需要你作画，不需要给我参考，不需要你给我形容你的作画内容，请直接给出作画内容，你不要回复”好的，我会画一张“等不必要的内容，你只需回复作画内容。你听懂了吗","听懂了。请给我一些作画的指令。"]]
                 query = str(f"不需要你作画，不需要给我参考，不需要你给我形容你的作画内容，请给出“{prompt_text}”中的作画内容，请直接给出作画内容和对象")
                 draw_object = self.predict(query,const.max_length, const.top_p, const.temperature, prompt_history)
@@ -128,4 +136,8 @@ class ChatGML(Bot):
             elif const.SEARCH in query[:6]:
                 print("进行网络信息搜索........")
                 searchQuery = self.deleteInvalid(query[6:]) # 这里不知道对不对 todo
-            
+
+    def run():
+        print("初始化chat_gml_bot...")
+        ChatGML.reply(ChatGML,"testText")
+        
