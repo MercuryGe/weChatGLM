@@ -14,11 +14,13 @@ from PIL import Image
 #class ChatGML(Bot):
 class ChatGML():
     def __init__(self):
+        global sd_model_dict # sd模型的model_name与model_hash
         if PAUSE == False:
             print("初始化stable diffusion...")
             print("读取sd模型...")
-            #model_name, model_hash = Util.stable_diffusion_get_sd_models()
-            print("读取")
+            model_name, model_hash = Util.stable_diffusion_get_sd_models()
+            sd_model_dict = dict(zip(model_name, model_hash))
+            print("读取本地的sd_model成功...")
 
             print("初始化chatGML....")
             self.tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH,trust_remote_code=True)
